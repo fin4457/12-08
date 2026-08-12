@@ -106,4 +106,6 @@ xtrabackup --backup --user=root --password=secret --target-dir=/backups/incr-1 -
 xtrabackup --backup --user=root --password=secret --target-dir=/backups/incr-2 --incremental-basedir=/backups/incr-1
 ```
 
+Использование репликации вместо (или в дополнение) обычного резервного копирования дает ключевые преимущества в ситуациях, когда на первом месте стоят минимальное время простоя, сохранение последних данных и снижение нагрузки на основную базу.
+
 ---
