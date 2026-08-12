@@ -37,7 +37,7 @@
 
 *Приведите ответ в свободной форме.*  
 
-### Решение 1.  
+### Решение 2.  
 
 В PostgreSQL есть встроенный инструмент для создания резервных копий — утилита pg_dump.  
 
@@ -73,4 +73,17 @@
 
 *Приведите ответ в свободной форме.*
 
+### Решение 2.  
+
+Для создания инкрементного резервного копирования в MySQL используется утилита MySQL Enterprise Backup (команда mysqlbackup), которая входит в коммерческую версию СУБД
+```
+mysqlbackup \
+  --defaults-file=/etc/my.cnf \
+  --user=backup_user \
+  --password='your_password' \
+  --incremental \
+  --incremental-base=history:last_backup \
+  --incremental-backup-dir=/var/backup/incremental_data \
+  backup
+```
 ---
