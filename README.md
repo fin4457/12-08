@@ -86,4 +86,24 @@ mysqlbackup \
   --incremental-backup-dir=/var/backup/incremental_data \
   backup
 ```
+В бесплатной версии MySQL утилита mysqldump не поддерживает инкрементные бэкапы (она способна делать только полные логические дампы). Для организации инкрементного копирования в применяется форк утилиты под названием mariadb-backup (ранее mariabackup) или Percona XtraBackup.
+
+Percona XtraBackup (или Mariabackup для MariaDB)  
+
+Порядок действий:  
+Полная резервная копия. Создаётся согласованная копия базы. После этого в каталоге создаётся файл xtrabackup_checkpoints, который содержит LSN и служит основой для инкрементных копий.  
+Первая инкрементная копия. Выполняется с указанием каталога полной копии через флаг --incremental-basedir. Утилита считывает LSN из xtrabackup_checkpoints и копирует только изменённые с этого момента страницы.  
+Последующие инкрементные копии. Для каждой следующей копии в цепочке флаг --incremental-basedir указывает на непосредственно предшествующую инкрементную копию.  
+
+```
+# Полная резервная копия
+xtrabackup --backup --user=root --password=secret --target-dir=/backups/full-2025 --datadir=/var/lib/mysql
+
+# Первая инкрементная копия (опора на полную)
+xtrabackup --backup --user=root --password=secret --target-dir=/backups/incr-1 --incremental-basedir=/backups/full-2025
+
+# Последующая инкрементная копия (опора на предыдущий инкремент)
+xtrabackup --backup --user=root --password=secret --target-dir=/backups/incr-2 --incremental-basedir=/backups/incr-1
+```
+
 ---
